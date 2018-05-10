@@ -92,17 +92,31 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Aluno aluno = (Aluno) lv_alunos.getItemAtPosition(position);
 
-                Toast.makeText(context, "Aluno " + aluno.getNome() + "foi clicado", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Aluno " + aluno.getNome() + "foi clicado", Toast.LENGTH_SHORT).show();
+
+                //objeto utilizado para mudancas entre activites
+                Intent intent = new Intent(MainActivity.this, FormularioAluno.class);
+
+                //adicionando mais informacoes a intent  para ser recuperado na tela chamada
+                intent.putExtra("aluno", aluno);
+
+                startActivity(intent);
+
+
 
             }
         });
+
 
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, final ContextMenu.ContextMenuInfo menuInfo) {
+
+        //criando um menu na  mao
        MenuItem deletar = menu.add("Deletar");
 
+       //listener que aguarda evento do click de um elemento no item do menu
        deletar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
            @Override
            public boolean onMenuItemClick(MenuItem menuItem) {

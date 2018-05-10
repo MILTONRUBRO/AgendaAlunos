@@ -1,6 +1,7 @@
 package com.example.company.agenda;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -44,6 +45,17 @@ public class FormularioAluno extends AppCompatActivity {
 
     private void initAction() {
 
+        //recebendo valores da intent da MainActivity
+        Intent intent = getIntent();
+
+        //captura as informacoes extras que foram passadas com serializable
+        Aluno aluno = (Aluno) intent.getSerializableExtra("aluno");
+
+        //caso o aluno seja diferente de nulo chama se o helper para preencher os valores
+        if (aluno != null) {
+            helper.preencherFormulario(aluno);
+        }
+
     }
 
     @Override
@@ -67,12 +79,18 @@ public class FormularioAluno extends AppCompatActivity {
                 Aluno aluno = helper.pegaAluno();
 
                 //criando o objeto dao para manipular acoes do banco
-                AlunoDAO dao = new AlunoDAO(this);
+                AlunoDAO dao = new AlunoDAO(context);
 
-                dao.insere(aluno);
+                if (aluno.getId() != null) {
+                    dao.altera(aluno);
+                } else {
+                    dao.insere(aluno);
+                }
+
+
                 dao.close();
 
-                Toast.makeText(context, "Aluno  " +  aluno.getNome() + " adicionado com sucesso", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Aluno  " + aluno.getNome() + " adicionado com sucesso", Toast.LENGTH_SHORT).show();
 
                 finish();
                 break;

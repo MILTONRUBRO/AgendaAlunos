@@ -16,6 +16,8 @@ public class FormularioHelper {
     private EditText et_telefone;
     private EditText et_site;
     private RatingBar rb_nota;
+    private Aluno aluno;
+
 
     public FormularioHelper(FormularioAluno activity) {
 
@@ -26,12 +28,11 @@ public class FormularioHelper {
         et_site = activity.findViewById(R.id.formulario_et_site_pessoal);
         rb_nota = activity.findViewById(R.id.formulario_rb);
 
+        aluno = new Aluno();
+
     }
 
     public Aluno pegaAluno() {
-
-        //cria o objeto aluno
-        Aluno aluno = new Aluno();
 
         //seta os valores capturados do formulario
         aluno.setNome(et_nome.getText().toString().trim());
@@ -43,6 +44,16 @@ public class FormularioHelper {
 
         return aluno;
 
+    }
+
+    public void preencherFormulario(Aluno aluno) {
+        et_nome.setText(aluno.getNome());
+        et_endereco.setText(aluno.getEndereco());
+        et_telefone.setText(aluno.getTelefone());
+        et_site.setText(aluno.getSite());
+        rb_nota.setProgress(aluno.getNota().intValue());
+
+        this.aluno = aluno;
 
     }
 }

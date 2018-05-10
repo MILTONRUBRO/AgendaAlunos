@@ -1,23 +1,25 @@
 package com.example.company.agenda.modelo;
 
+import java.io.Serializable;
+
 /**
  * Created by milton on 02/05/2018.
  */
 
-public class Aluno {
+public class Aluno implements Serializable{
 
-    private long id;
+    private Long id;
     private String nome;
     private String endereco;
     private String telefone;
     private String site;
-    private double nota;
+    private Double nota;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -53,11 +55,11 @@ public class Aluno {
         this.site = site;
     }
 
-    public double getNota() {
+    public Double getNota() {
         return nota;
     }
 
-    public void setNota(double nota) {
+    public void setNota(Double nota) {
         this.nota = nota;
     }
 

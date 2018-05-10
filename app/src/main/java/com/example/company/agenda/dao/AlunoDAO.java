@@ -19,13 +19,13 @@ import java.util.List;
 public class AlunoDAO extends SQLiteOpenHelper {
 
     public AlunoDAO(Context context) {
-        super(context, "agenda", null, 1);
+        super(context, "agenda", null, 2);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         //query para criacao da tabela
-        String sql = "CREATE TABLE alunos(id INTEGER PRIMARY KEY, nome TEXT NOT NULL, endereco TEXT, telefone TEXT, site TEXT, nota REAL );";
+        String sql = "CREATE TABLE alunos(id INTEGER PRIMARY KEY, nome TEXT, endereco TEXT, telefone TEXT, site TEXT, nota REAL);";
 
         db.execSQL(sql);
 
@@ -51,7 +51,7 @@ public class AlunoDAO extends SQLiteOpenHelper {
 
         dados.put("nome", aluno.getNome());
         dados.put("endereco", aluno.getEndereco());
-        dados.put("telefone", aluno.getEndereco());
+        dados.put("telefone", aluno.getTelefone());
         dados.put("site", aluno.getSite());
         dados.put("nota", aluno.getNota());
 
@@ -94,6 +94,27 @@ public class AlunoDAO extends SQLiteOpenHelper {
 
         String[] params = {String.valueOf(aluno.getId())};
         db.delete("alunos", "id = ?", params);
+
+
+    }
+
+    public void altera(Aluno aluno) {
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues dados = new ContentValues();
+
+        dados.put("nome", aluno.getNome());
+        dados.put("endereco", aluno.getEndereco());
+        dados.put("telefone", aluno.getTelefone());
+        dados.put("site", aluno.getSite());
+        dados.put("nota", aluno.getNota());
+
+        String[] params = {aluno.getId().toString()};
+
+
+        db.update("alunos", dados, "id = ?", params);
+
 
 
     }
