@@ -38,14 +38,11 @@ public class FormularioAluno extends AppCompatActivity {
 
     private void initVars() {
         context = getBaseContext();
-
         helper = new FormularioHelper(this);
 
     }
 
     private void initAction() {
-
-
 
     }
 
