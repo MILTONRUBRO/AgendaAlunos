@@ -1,7 +1,12 @@
 package com.example.company.agenda;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.provider.Browser;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -103,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
 
 
-
             }
         });
 
@@ -113,30 +117,83 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, final ContextMenu.ContextMenuInfo menuInfo) {
 
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        final Aluno aluno = (Aluno) lv_alunos.getItemAtPosition(info.position);
+
+        //Adiciona ligar ao menu
+        MenuItem itemLigar = menu.add("Ligar");
+
+        itemLigar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 123);
+
+                }else{
+                    Intent intentLigar = new Intent(Intent.ACTION_CALL);
+                    intentLigar.setData(Uri.parse("tel:" + aluno.getTelefone()));
+                    startActivity(intentLigar);
+                }
+
+                return false;
+            }
+        });
+
+
+        //adicionando enviar sms para o menu
+        MenuItem itemSMS = menu.add("Enviar SMS");
+
+        Intent intentSMS = new Intent(Intent.ACTION_VIEW);
+        intentSMS.setData(Uri.parse("sms:" + aluno.getTelefone()));
+        itemSMS.setIntent(intentSMS);
+
+        //adicionando visualizar no mapa
+        MenuItem itemMapa = menu.add("Visualizar no Mapa");
+
+        Intent intentMapa = new Intent(Intent.ACTION_VIEW);
+        intentMapa.setData(Uri.parse("geo:0,0?q=" + aluno.getEndereco()));
+        itemMapa.setIntent(intentMapa);
+
+        //menu para adicionar  visitar site do aluno
+        MenuItem itemSite = menu.add("Visitar Site");
+
+        //Intent Explicita
+        //Intent intentSite = new Intent (context, Browser.class);
+
+        //Intent implicita
+        Intent intentSite = new Intent(Intent.ACTION_VIEW);
+
+
+        String site = aluno.getSite();
+        if (site.startsWith("http://")) {
+            site = "http://" + site;
+        }
+
+
+        intentSite.setData(Uri.parse(site));
+
+        itemSite.setIntent(intentSite);
+
         //criando um menu na  mao
-       MenuItem deletar = menu.add("Deletar");
+        MenuItem deletar = menu.add("Deletar");
 
-       //listener que aguarda evento do click de um elemento no item do menu
-       deletar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-           @Override
-           public boolean onMenuItemClick(MenuItem menuItem) {
+        //listener que aguarda evento do click de um elemento no item do menu
+        deletar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
 
-               AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+                AlunoDAO dao = new AlunoDAO(context);
 
-               Aluno aluno = (Aluno) lv_alunos.getItemAtPosition(info.position);
-
-               AlunoDAO dao = new AlunoDAO(context);
-
-               dao.deleta(aluno);
-
-               dao.close();
+                dao.deleta(aluno);
+                dao.close();
 
                 carregaLista();
-               //Toast.makeText(context, "Deletar o aluno" + aluno.getNome(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Deletar o aluno" + aluno.getNome(), Toast.LENGTH_SHORT).show();
 
-               return false;
-           }
-       });
+                return false;
+            }
+        });
 
 
     }
