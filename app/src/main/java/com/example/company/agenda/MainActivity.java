@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.company.agenda.adapter.AlunosAdapter;
 import com.example.company.agenda.dao.AlunoDAO;
 import com.example.company.agenda.modelo.Aluno;
 
@@ -72,9 +73,12 @@ public class MainActivity extends AppCompatActivity {
         //lista de alunos feita na mao
         //String[] alunos = {"Ragnar", "Rollo", "Floki", "Lagertha", "Bjorn"};
 
-        adapter = new ArrayAdapter<Aluno>(context, android.R.layout.simple_list_item_1, alunos);
+        //monta a lista com o adapter
+        //adapter = new ArrayAdapter<Aluno>(context, android.R.layout.simple_list_item_1, alunos);
 
-        lv_alunos.setAdapter(adapter);
+        AlunosAdapter alunosAdapter = new AlunosAdapter(this, alunos);
+
+        lv_alunos.setAdapter(alunosAdapter);
     }
 
 
