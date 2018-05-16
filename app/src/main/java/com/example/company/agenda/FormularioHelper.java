@@ -1,6 +1,10 @@
 package com.example.company.agenda;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 
 import com.example.company.agenda.modelo.Aluno;
@@ -17,7 +21,7 @@ public class FormularioHelper {
     private EditText et_site;
     private RatingBar rb_nota;
     private Aluno aluno;
-
+    private ImageView img_foto;
 
     public FormularioHelper(FormularioAluno activity) {
 
@@ -27,7 +31,7 @@ public class FormularioHelper {
         et_telefone = activity.findViewById(R.id.formulario_et_telefone);
         et_site = activity.findViewById(R.id.formulario_et_site_pessoal);
         rb_nota = activity.findViewById(R.id.formulario_rb);
-
+        img_foto = activity.findViewById(R.id.formulario_img_foto);
         aluno = new Aluno();
 
     }
@@ -40,7 +44,7 @@ public class FormularioHelper {
         aluno.setTelefone(et_telefone.getText().toString().trim());
         aluno.setSite(et_site.getText().toString().trim());
         aluno.setNota(Double.valueOf(rb_nota.getProgress()));
-
+        aluno.setCaminhoFoto((String) img_foto.getTag());
 
         return aluno;
 
@@ -52,8 +56,27 @@ public class FormularioHelper {
         et_telefone.setText(aluno.getTelefone());
         et_site.setText(aluno.getSite());
         rb_nota.setProgress(aluno.getNota().intValue());
+        carregaImagem(aluno.getCaminhoFoto());
 
         this.aluno = aluno;
 
+    }
+
+    public void carregaImagem(String caminhoFoto) {
+
+        if (caminhoFoto != null) {
+            //converte a foto num bitmap
+            Bitmap bitmap = BitmapFactory.decodeFile(caminhoFoto);
+
+            //reduz e trata a imagem recebida
+            Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
+            //passa a imagem para imageview
+            img_foto.setImageBitmap(bitmapReduzido);
+
+            //seta a imagem para ocupar toda a imageview
+            img_foto.setScaleType(ImageView.ScaleType.FIT_XY);
+            img_foto.setTag(caminhoFoto);
+
+        }
     }
 }

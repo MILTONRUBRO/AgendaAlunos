@@ -4,6 +4,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="225dp">
+
+
+        <ImageView
+            android:id="@+id/formulario_img_foto"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#00A8EC"
+            android:src="@drawable/person" />
+
+        <Button
+            android:id="@+id/formulario_btn_foto"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/fundo_camera" />
+
+    </RelativeLayout>
+
     <EditText
         android:id="@+id/formulario_et_nome"
         android:layout_width="match_parent"
@@ -40,8 +63,6 @@
         android:layout_marginTop="20dp"
         android:max="10"
         android:numStars="5" />
-
-
 
 
 </LinearLayout>

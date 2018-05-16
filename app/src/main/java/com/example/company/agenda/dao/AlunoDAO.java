@@ -19,13 +19,19 @@ import java.util.List;
 public class AlunoDAO extends SQLiteOpenHelper {
 
     public AlunoDAO(Context context) {
-        super(context, "agenda", null, 2);
+        super(context, "agenda", null, 3);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         //query para criacao da tabela
-        String sql = "CREATE TABLE alunos(id INTEGER PRIMARY KEY, nome TEXT, endereco TEXT, telefone TEXT, site TEXT, nota REAL);";
+        String sql = "CREATE TABLE alunos(id INTEGER PRIMARY KEY, " +
+                "nome TEXT, " +
+                "endereco TEXT, " +
+                "telefone TEXT, " +
+                "site TEXT, " +
+                "nota REAL, " +
+                "caminhoFoto TEXT);";
 
         db.execSQL(sql);
 
@@ -33,11 +39,16 @@ public class AlunoDAO extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        String sql = "";
+        switch (oldVersion){
+            case 1:
+                sql = "ALTER TABLE alunos ADD COLUMN caminhoFoto TEXT";
+                db.execSQL(sql);
+             case 2:
+                sql = "ALTER TABLE alunos ADD COLUMN caminhoFoto TEXT";
+                db.execSQL(sql);
+        }
 
-        String sql = "DROP TABLE IF EXISTS alunos ";
-
-        db.execSQL(sql);
-        onCreate(db);
 
     }
 
@@ -54,6 +65,7 @@ public class AlunoDAO extends SQLiteOpenHelper {
         dados.put("telefone", aluno.getTelefone());
         dados.put("site", aluno.getSite());
         dados.put("nota", aluno.getNota());
+        dados.put("caminhoFoto", aluno.getCaminhoFoto());
 
         db.insert("alunos", null, dados);
 
@@ -70,7 +82,7 @@ public class AlunoDAO extends SQLiteOpenHelper {
         List<Aluno> alunos = new ArrayList<>();
 
 
-        while(cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             Aluno aluno = new Aluno();
             aluno.setId(cursor.getLong(cursor.getColumnIndex("id")));
             aluno.setNome(cursor.getString(cursor.getColumnIndex("nome")));
@@ -78,6 +90,7 @@ public class AlunoDAO extends SQLiteOpenHelper {
             aluno.setTelefone(cursor.getString(cursor.getColumnIndex("telefone")));
             aluno.setSite(cursor.getString(cursor.getColumnIndex("site")));
             aluno.setNota(cursor.getDouble(cursor.getColumnIndex("nota")));
+            aluno.setCaminhoFoto(cursor.getString(cursor.getColumnIndex("caminhoFoto")));
 
             alunos.add(aluno);
 
@@ -109,12 +122,12 @@ public class AlunoDAO extends SQLiteOpenHelper {
         dados.put("telefone", aluno.getTelefone());
         dados.put("site", aluno.getSite());
         dados.put("nota", aluno.getNota());
+        dados.put("caminhoFoto", aluno.getCaminhoFoto());
 
         String[] params = {aluno.getId().toString()};
 
 
         db.update("alunos", dados, "id = ?", params);
-
 
 
     }
